@@ -47,7 +47,6 @@ struct ProfileContentView: View {
                 Text("Posts")
                     .font(.title)
                     .fontWeight(.semibold)
-                    .foregroundColor(.darkBlue)
                     .hAlign(.leading)
                     .padding(.vertical, 15)
             }
