@@ -165,11 +165,14 @@ struct CreateNewPostView: View {
     }
     
     func createDocumentAtFirebase (from post: Post) async throws {
-        let _ = try Firestore.firestore().collection("Posts").addDocument(from: post, completion: { error in
+        let document = Firestore.firestore().collection("Posts").document()
+        let _ = try document.setData(from: post, completion: { error in
             if error == nil {
                 //Post successfully created and stored in Firebase
                 isLoading = false
-                onPost(post)
+                var updatedPost = post
+                updatedPost.id = document.documentID
+                onPost(updatedPost)
                 dismiss()
             }
         })

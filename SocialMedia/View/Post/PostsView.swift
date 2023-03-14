@@ -27,6 +27,17 @@ struct PostsView: View {
                     }
                     .padding(15)
                 }
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink{
+                            SearchView()
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .tint(.gray)
+                                .scaleEffect(0.9)
+                        }
+                    }
+                })
                 .navigationTitle("Your feed")
         }
             .fullScreenCover(isPresented: $createNewPost) {

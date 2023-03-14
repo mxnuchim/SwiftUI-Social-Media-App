@@ -9,18 +9,20 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ProfileContentView: View {
+    @State private var fetchedPosts: [Post] = []
+    
     var user: User
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack {
-                HStack (spacing: 12) {
+                VStack (spacing: 12) {
                     WebImage(url: user.userProfileURL).placeholder{
                         Image("DefaultProfile")
                             .resizable()
                     }
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
+                    .frame(width: 120, height: 120)
                     .clipShape(Circle())
                     
                     VStack(alignment: .leading, spacing: 6) {
@@ -49,6 +51,8 @@ struct ProfileContentView: View {
                     .fontWeight(.semibold)
                     .hAlign(.leading)
                     .padding(.vertical, 15)
+                
+                ReusablePostsView(basedOnUID: true, uid: user.userUID, posts: $fetchedPosts)
             }
             .padding(15)
         }

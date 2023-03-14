@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E2EB84329C07F8300F0C4F9 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2EB84229C07F8300F0C4F9 /* SearchView.swift */; };
 		7E7597B229BC7CE000DD8F47 /* CreateNewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7597B129BC7CE000DD8F47 /* CreateNewPostView.swift */; };
 		7E7597B429BC7D8200DD8F47 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7597B329BC7D8200DD8F47 /* PostModel.swift */; };
 		7E7597B629BCA62F00DD8F47 /* PostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7597B529BCA62F00DD8F47 /* PostsView.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E2EB84229C07F8300F0C4F9 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		7E7597B129BC7CE000DD8F47 /* CreateNewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostView.swift; sourceTree = "<group>"; };
 		7E7597B329BC7D8200DD8F47 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		7E7597B529BCA62F00DD8F47 /* PostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
@@ -70,6 +72,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E2EB84429C07F9500F0C4F9 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				7EC1A99429BB9BFE00B8734F /* ProfileView.swift */,
+				7EC1A99629BBBCD800B8734F /* ProfileContentView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		7E2EB84529C07FDE00F0C4F9 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				7EB5D78029BA21A90071C61B /* LoginView.swift */,
+				7EB5D78229BA6E0F0071C61B /* RegisterView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		7E2EB84629C0800500F0C4F9 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				7E7597B529BCA62F00DD8F47 /* PostsView.swift */,
+				7E7597B129BC7CE000DD8F47 /* CreateNewPostView.swift */,
+				7E84954F29BFB55100771098 /* ReusablePostsView.swift */,
+				7E84955129BFC0BE00771098 /* SinglePostCardView.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		7EB5D75F29BA13EA0071C61B = {
 			isa = PBXGroup;
 			children = (
@@ -112,17 +143,13 @@
 		7EB5D77E29BA216F0071C61B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7E2EB84529C07FDE00F0C4F9 /* Auth */,
+				7E2EB84429C07F9500F0C4F9 /* Profile */,
+				7E2EB84629C0800500F0C4F9 /* Post */,
 				7EB5D76D29BA13EA0071C61B /* ContentView.swift */,
-				7EB5D78029BA21A90071C61B /* LoginView.swift */,
-				7EB5D78229BA6E0F0071C61B /* RegisterView.swift */,
 				7E79263329BB2C2D00BAF4A2 /* LoadingView.swift */,
 				7EC1A99229BB7CEC00B8734F /* HomeView.swift */,
-				7E7597B529BCA62F00DD8F47 /* PostsView.swift */,
-				7EC1A99429BB9BFE00B8734F /* ProfileView.swift */,
-				7EC1A99629BBBCD800B8734F /* ProfileContentView.swift */,
-				7E7597B129BC7CE000DD8F47 /* CreateNewPostView.swift */,
-				7E84954F29BFB55100771098 /* ReusablePostsView.swift */,
-				7E84955129BFC0BE00771098 /* SinglePostCardView.swift */,
+				7E2EB84229C07F8300F0C4F9 /* SearchView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -245,6 +272,7 @@
 				7EB5D78F29BA8F870071C61B /* UserModel.swift in Sources */,
 				7E7597B629BCA62F00DD8F47 /* PostsView.swift in Sources */,
 				7E84955229BFC0BE00771098 /* SinglePostCardView.swift in Sources */,
+				7E2EB84329C07F8300F0C4F9 /* SearchView.swift in Sources */,
 				7EC1A99329BB7CEC00B8734F /* HomeView.swift in Sources */,
 				7E79263429BB2C2D00BAF4A2 /* LoadingView.swift in Sources */,
 				7EB5D76C29BA13EA0071C61B /* SocialMediaApp.swift in Sources */,

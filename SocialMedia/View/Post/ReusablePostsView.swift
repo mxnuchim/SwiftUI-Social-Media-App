@@ -10,8 +10,14 @@ import Firebase
 import FirebaseFirestore
 
 struct ReusablePostsView: View {
+    var basedOnUID: Bool = false
+    var uid: String = ""
     @Binding var posts: [Post]
     @State var isLoading: Bool = true
+    
+    /// - For Pagination
+    @State private var paginationDoc: QueryDocumentSnapshot?
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false){
             LazyVStack {
@@ -20,7 +26,7 @@ struct ReusablePostsView: View {
                         .padding(.top, 30)
                 } else {
                     if posts.isEmpty{
-                        //No posts found from db
+                        /// - No posts found from db
                         Text("No posts yet")
                             .font(.caption)
                             .foregroundColor(.darkBlue)
@@ -33,8 +39,11 @@ struct ReusablePostsView: View {
             .padding(15)
         }
         .refreshable {
+            /// - Disabling refresh functionality for UID based fetches
+            guard !basedOnUID else {return}
             isLoading = true
             posts = []
+            paginationDoc = nil
             await getPosts()
         }
         .task{
@@ -43,7 +52,7 @@ struct ReusablePostsView: View {
         }
     }
     
-    //rendering fetched posts
+    /// - Rendering fetched posts
     @ViewBuilder
     func Posts()-> some View {
         ForEach(posts){post in
@@ -55,9 +64,15 @@ struct ReusablePostsView: View {
                     posts[index].dislikedIDs = updatedPost.dislikedIDs
                 }
             } onDelete: {
-                //Removing post form array
+                /// - Removing post form array
                 withAnimation(.easeIn(duration: 0.25)){
-                    posts.removeAll{post == $0}
+                    posts.removeAll{post.id == $0.id}
+                }
+            }
+            .onAppear{
+              // - fetch new posts when last post appears
+                if post.id == posts.last?.id && paginationDoc != nil {
+                    Task{await getPosts()}
                 }
             }
             
@@ -69,15 +84,29 @@ struct ReusablePostsView: View {
     func getPosts() async {
         do{
             var query: Query!
-            query = Firestore.firestore().collection("Posts")
-                .order(by: "createdAt", descending: true)
-                .limit(to: 30)
+            if let paginationDoc {
+                query = Firestore.firestore().collection("Posts")
+                    .order(by: "createdAt", descending: true)
+                    .start(afterDocument: paginationDoc)
+                    .limit(to: 25)
+            } else {
+                query = Firestore.firestore().collection("Posts")
+                    .order(by: "createdAt", descending: true)
+                    .limit(to: 25)
+            }
+            
+            /// - Query based on user UID
+            if basedOnUID {
+                query = query.whereField("userUID", isEqualTo: uid)
+            }
+            
             let docs = try await query.getDocuments()
             let fetchedPosts = docs.documents.compactMap{doc -> Post? in
                 try? doc.data(as: Post.self)
             }
             await MainActor.run(body: {
-                posts = fetchedPosts
+                posts.append(contentsOf: fetchedPosts)
+                paginationDoc = docs.documents.last
                 isLoading = false
             })
         } catch {

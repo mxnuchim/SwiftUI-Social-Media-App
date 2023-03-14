@@ -22,16 +22,22 @@ struct SinglePostCardView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            WebImage(url: post.userProfileURL)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 35, height: 35)
-                .clipShape(Circle())
+            NavigationLink{
+                ProfileContentView(user: <#T##User#>)
+            } label: {
+                WebImage(url: post.userProfileURL)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 35, height: 35)
+                    .clipShape(Circle())
+            }
+            
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(post.username)
                     .font(.callout)
                     .fontWeight(.semibold)
+                    .textCase(.lowercase)
                 Text(post.text)
                     .textSelection(.enabled)
                     .padding(.vertical, 8)
@@ -59,14 +65,14 @@ struct SinglePostCardView: View {
         }
         .hAlign(.leading)
         .overlay(alignment: .topTrailing, content: {
-            //if author,make delete post button vivible
+            //if author,make delete post button visible
             if post.userUID == userUID{
                 Menu {
-                    Button("Delete Post", role: .destructive, action: {})
+                    Button("Delete Post", role: .destructive, action: deletePost)
                 } label: {
                     Image(systemName: "ellipsis")
                         .font(.caption)
-                        .foregroundColor(.black)
+                        .foregroundColor(.gray)
                         .padding(8)
                         .contentShape(Rectangle())
                 }
@@ -89,10 +95,17 @@ struct SinglePostCardView: View {
                 })
             }
         }
+        .onDisappear{
+            //Remove snapshot listener when component is not in view. This saves reads to the db and ultimately saves money
+            if let doclistener {
+                doclistener.remove()
+                self.doclistener = nil
+            }
+        }
     }
     
     func interactWithPost()-> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 12) {
             Button (action: likePost){
                             Image(systemName: post.likedIDs.contains(userUID) ? "suit.heart.fill" : "suit.heart")
                         }
@@ -150,6 +163,22 @@ struct SinglePostCardView: View {
                 ])
             }
             
+        }
+    }
+    
+    func deletePost() {
+        Task {
+            
+            //Delete post image if it exists
+            do {
+                if post.imageRefID != "" {
+                    try await Storage.storage().reference().child("Post_Images").child(post.imageRefID).delete()
+                }
+                guard let postID = post.id else {return}
+                try await Firestore.firestore().collection("Posts").document(postID).delete()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 }
